@@ -2,14 +2,16 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const app = express();
+const routes = require('./routers');
 
 app.use(cors());
 app.set('viw engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, '../', 'public')));
 
+routes(app);
+
 app.get('/', (req, res) => {
-  throw new Error('Testing Error');
   res.send('<h1>Hello World</h1>');
 });
 
@@ -20,7 +22,7 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-    console.log(error);
+  console.log(error);
   if (error.status === 404) {
     res.status(404);
     return res.render('errors/404.ejs');
